@@ -10,14 +10,25 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".parrot.DroneListActivity">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Device List"/>
 
-    <ListView
-        android:id="@+id/list"
-        android:layout_height="wrap_content"
-        android:layout_width="match_parent">
-    </ListView>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="left|top">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Drone List"
+            android:textSize="@dimen/abc_text_size_headline_material"
+            android:layout_margin="@dimen/abc_text_size_subtitle_material_toolbar" />
+
+        <ListView
+            android:id="@+id/list"
+            android:layout_height="match_parent"
+            android:layout_width="match_parent">
+        </ListView>
+    </LinearLayout>
 </FrameLayout>

@@ -24,4 +24,5 @@ dependencies {
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:22.1.1'
     compile 'com.parrot:arsdk:3.9.0'
+    compile 'com.amazonaws:aws-android-sdk-iot:2.2.12+'
 }
