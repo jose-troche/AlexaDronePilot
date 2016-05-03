@@ -83,7 +83,7 @@ function onIntent(intentRequest, session, callback) {
     } else if ("AMAZON.StopIntent" === intentName) {
         endSession(callback);
     } else if ("AMAZON.HelpIntent" === intentName) {
-        getWelcomeResponse(callback);
+        getHelpResponse(callback);
     } else {
         throw "Invalid intent";
     }
@@ -104,16 +104,31 @@ function getWelcomeResponse(callback) {
     // If we wanted to initialize the session to have some attributes we could add those here.
     var sessionAttributes = {};
     var cardTitle = "Welcome";
-    var speechOutput = "Welcome to Drone Pilot. You can say a command to pilot the drone" +
-        "like take off, land, up, down, left, right, forward, backward. Now say a command";
+    var speechOutput = "Say take off"
     // If the user either does not reply to the welcome message or says something that is not
     // understood, they will be prompted again with this text.
-    var repromptText = "Please say a command to pilot the drone";
+    var repromptText = "Please say a command";
     var shouldEndSession = false;
 
     callback(sessionAttributes,
         buildSpeechletResponse(cardTitle, speechOutput, repromptText, shouldEndSession));
 }
+
+function getHelpResponse(callback) {
+    // If we wanted to initialize the session to have some attributes we could add those here.
+    var sessionAttributes = {};
+    var cardTitle = "Help";
+    var speechOutput = "You can say a command to pilot the drone" +
+        "like take off, land, up, down, left, right, forward, backward. Now say a command";
+    // If the user either does not reply to the welcome message or says something that is not
+    // understood, they will be prompted again with this text.
+    var repromptText = "Please say a command";
+    var shouldEndSession = false;
+
+    callback(sessionAttributes,
+        buildSpeechletResponse(cardTitle, speechOutput, repromptText, shouldEndSession));
+}
+
 
 /**
  * Sends a command
@@ -157,7 +172,7 @@ function droneApi(command, callback) {
         }
         else {  // successful response
             console.log(data);
-            callback("Executed " + command);
+            callback(""); //Executed " + command);
         }    
     });
 
