@@ -1,0 +1,6 @@
+CommandIntent {Command}
+
+AMAZON.StopIntent bye
+AMAZON.StopIntent goodbye
+AMAZON.StopIntent stop
+AMAZON.StopIntent cancel

@@ -1,0 +1,19 @@
+{
+  "intents": [
+    {
+      "intent": "CommandIntent",
+      "slots": [
+        {
+          "name": "Command",
+          "type": "LIST_OF_COMMANDS"
+        }
+      ]
+    },
+    {
+      "intent": "AMAZON.HelpIntent"
+    },
+    {
+      "intent": "AMAZON.StopIntent"
+    }
+  ]
+}
