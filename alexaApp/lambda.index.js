@@ -146,7 +146,7 @@ function droneApi(command, callback) {
     
     var params = {
         topic: '$aws/things/Drone/shadow/update', // required
-        payload: '{ "command": '+ command + ' }',
+        payload: '{ "command": "'+ command + '" }',
         qos: 0
     };
 
