@@ -1,3 +1,20 @@
 # Alexa Drone Pilot
-Alexa application to pilot a drone with voice commands
+
+###Objective
+To pilot a quadcopter drone with Alexa voice commands in realtime
+
+###Voice Interaction
+_Alexa start drone pilot... take off_  -> The drone takes off
+
+_Go up_  -> The drone flies up
+
+... other commands ...
+
+_Land_  -> The drone lands
+
+###A Multi-Service Solution
+
+Alexa captures voice commands and sends them to the Alexa Skills Kit (ASK) service to convert/map them into structured text commands (JSON intents). A recognized command is sent to an AWS Lambda function that publishes the command to an AWS IoT topic to update the drone state (shadow).
+
+In the other side of the world, a mobile application subscribes to the drone topic and listens for commands. The application uses the IoT preferred protocol mqtt to connect. On every command received the mobile application sends the command to the drone. All this happens in real time.
 
