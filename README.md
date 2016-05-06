@@ -18,3 +18,5 @@ Alexa captures voice commands and sends them to the Alexa Skills Kit (ASK) servi
 
 In the other side of the world, a mobile application subscribes to the drone topic and listens for commands. The application uses the IoT preferred protocol mqtt to connect. On every command received the mobile application sends the command to the drone. All this happens in real time.
 
+![Architecture](https://raw.githubusercontent.com/jose-troche/Documentation/master/AlexaDronePilot/AlexaDronePilotArchitecture.png)
+
