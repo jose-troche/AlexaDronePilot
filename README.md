@@ -12,7 +12,7 @@ _Go up_  -> The drone flies up
 
 _Land_  -> The drone lands
 
-###A Multi-Service Solution
+###A Cloud Multi-Service Solution
 
 Alexa captures voice commands and sends them to the Alexa Skills Kit (ASK) service to convert/map them into structured text commands (JSON intents). A recognized command is sent to an AWS Lambda function that publishes the command to an AWS IoT topic to update the drone state (shadow).
 
