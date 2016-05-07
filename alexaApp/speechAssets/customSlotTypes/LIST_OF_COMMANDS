@@ -9,6 +9,8 @@ right
 left
 forward
 backward
+spin right
+spin left
 picture
 take picture
 flip
