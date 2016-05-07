@@ -1,6 +1,7 @@
 package com.jose_troche.alexadronepilot.aws_iot;
 
 import android.content.Context;
+import android.os.Handler;
 import android.util.Log;
 
 import com.amazonaws.auth.CognitoCachingCredentialsProvider;
@@ -29,6 +30,7 @@ import java.util.UUID;
 public class IotDroneSubscriber {
     private static final String TAG = "IotDroneSubscriber";
     private final Context mContext;
+    private final Handler mUiThreadHandler;
     private Listener mListener;
 
     // --- AWS IoT Constants to modify per your configuration ---
@@ -64,12 +66,15 @@ public class IotDroneSubscriber {
     public interface Listener {
         void onConnectionStatusChanged(String status);
         
-        void onCommandReceived(String command);
+        void onCommandReceived(String command, long duration);
     }
 
     public IotDroneSubscriber(Context context, Listener listener) {
         mContext = context;
         mListener = listener;
+
+        // A handler for the main (UI) thread
+        mUiThreadHandler = new Handler(context.getMainLooper());
 
         // MQTT client IDs are required to be unique per AWS IoT account.
         String clientId = UUID.randomUUID().toString();
@@ -104,12 +109,17 @@ public class IotDroneSubscriber {
                     public void onMessageArrived(final String topic, final byte[] data) {
                         try {
                             String message = new String(data, "UTF-8");
-                            String command = (new JSONObject(message)).getString("command");
+                            final String command = (new JSONObject(message)).getString("command");
                             Log.d(TAG, "Command arrived:");
                             Log.d(TAG, "   Topic: " + topic);
                             Log.d(TAG, " Command: " + command);
 
-                            mListener.onCommandReceived(command);
+                            mUiThreadHandler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    mListener.onCommandReceived(command, 1000 /* duration = 1 sec*/);
+                                }
+                            });
 
                         } catch (UnsupportedEncodingException e) {
                             Log.e(TAG, "Message encoding error.", e);
@@ -131,34 +141,45 @@ public class IotDroneSubscriber {
                 @Override
                 public void onStatusChanged(final AWSIotMqttClientStatus status,
                                             final Throwable throwable) {
-                    String newStatus;
+                    final String connectionStatus;
                     Log.d(TAG, "Status = " + String.valueOf(status));
                     
                     if (status == AWSIotMqttClientStatus.Connecting) {
-                        newStatus = "Connecting...";
+                        connectionStatus = "Connecting...";
                     } else if (status == AWSIotMqttClientStatus.Connected) {
-                        newStatus = "Connected";
+                        connectionStatus = "Connected";
                         subscribeToTopic(MQTT_DRONE_TOPIC);
                     } else if (status == AWSIotMqttClientStatus.Reconnecting) {
                         if (throwable != null) {
                             Log.e(TAG, "Connection error.", throwable);
                         }
-                        newStatus = "Reconnecting";
+                        connectionStatus = "Reconnecting";
                     } else if (status == AWSIotMqttClientStatus.ConnectionLost) {
                         if (throwable != null) {
                             Log.e(TAG, "Connection error.", throwable);
                         }
-                        newStatus = "Disconnected";
+                        connectionStatus = "Disconnected";
                     } else {
-                        newStatus = "Disconnected";
+                        connectionStatus = "Disconnected";
                     }
-                    
-                    mListener.onConnectionStatusChanged(newStatus);
+
+                    mUiThreadHandler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            mListener.onConnectionStatusChanged(connectionStatus);
+                        }
+                    });
+
                 }
             });
         } catch (final Exception e) {
             Log.e(TAG, "Connection error.", e);
-            mListener.onConnectionStatusChanged("Error! " + e.getMessage());
+            mUiThreadHandler.post(new Runnable() {
+                @Override
+                public void run() {
+                    mListener.onConnectionStatusChanged("IoT connection error: " + e.getMessage());
+                }
+            });
         }
     }
 

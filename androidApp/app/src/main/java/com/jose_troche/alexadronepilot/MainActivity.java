@@ -27,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
     private ProgressDialog mConnectionProgressDialog;
     private TextView mBatteryLabel;
     private Button mTakeOffLandBt;
+    private Handler mHandler;
 
     // AWS IoT Variables
     private TextView iotCommand;
@@ -43,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
 
         initIHM();
 
+        mHandler = new Handler();
         Intent intent = getIntent();
         ARDiscoveryDeviceService service = intent.getParcelableExtra(DroneListActivity.EXTRA_DEVICE_SERVICE);
         mMiniDrone = new MiniDrone(this, service);
@@ -132,11 +134,11 @@ public class MainActivity extends AppCompatActivity {
         }
 
         @Override
-        public void onCommandReceived(String command) {
+        public void onCommandReceived(String command, long duration) {
             Handler handler = new Handler();
             iotCommand.setText(command);
 
-            switch (command.toLowerCase()){
+            switch (command.toLowerCase().trim()){
                 case "take off":
                     mMiniDrone.takeOff();
                     break;
@@ -148,25 +150,37 @@ public class MainActivity extends AppCompatActivity {
                 case "fly up":
                 case "go up":
                 case "up":
-                    mMiniDrone.setGaz((byte) 50);
-                    handler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            mMiniDrone.setGaz((byte) 0);
-                        }
-                    }, 1000);
+                    setGaz(50, duration);
                     break;
 
                 case "fly down":
                 case "go down":
                 case "down":
-                    mMiniDrone.setGaz((byte) -50);
-                    handler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            mMiniDrone.setGaz((byte) 0);
-                        }
-                    }, 1000);
+                    setGaz(-50, duration);
+                    break;
+
+                case "forward":
+                    setPitch(50, duration);
+                    break;
+
+                case "backward":
+                    setPitch(-50, duration);
+                    break;
+
+                case "right":
+                    setRoll(50, duration);
+                    break;
+
+                case "left":
+                    setRoll(-50, duration);
+                    break;
+
+                case "spin right":
+                    setYaw(50, duration);
+                    break;
+
+                case "spin left":
+                    setYaw(-50, duration);
                     break;
 
                 case "flip":
@@ -180,6 +194,52 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     };
+
+    private void setPitch(int pct, long duration){
+        mMiniDrone.setPitch((byte) pct);
+        mMiniDrone.setFlag((byte) 1);
+        mHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mMiniDrone.setPitch((byte) 0);
+                mMiniDrone.setFlag((byte) 0);
+            }
+        }, duration);
+    }
+
+    private void setRoll(int pct, long duration){
+        mMiniDrone.setRoll((byte) pct);
+        mMiniDrone.setFlag((byte) 1);
+        mHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mMiniDrone.setRoll((byte) 0);
+                mMiniDrone.setFlag((byte) 0);
+            }
+        }, duration);
+    }
+
+    private void setYaw(int pct, long duration){
+        mMiniDrone.setYaw((byte) pct);
+        mHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mMiniDrone.setYaw((byte) 0);
+            }
+        }, duration);
+    }
+
+    private void setGaz(int pct, long duration){
+        mMiniDrone.setGaz((byte) pct);
+        mHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mMiniDrone.setGaz((byte) 0);
+            }
+        }, duration);
+    }
+
+
 
     private final MiniDrone.Listener mMiniDroneListener = new MiniDrone.Listener() {
         @Override
