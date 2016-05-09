@@ -18,5 +18,7 @@ Alexa captures voice commands and sends them to the Alexa Skills Kit (ASK) servi
 
 In the other side of the world, a mobile application subscribes to the drone topic and listens for commands. The application uses the IoT preferred protocol mqtt to connect. On every command received the mobile application sends the command to the drone. All this happens in real time.
 
+Because the Internet of Things service supports multiple subscribers, a whole fleet of drones can be controlled with a single voice command. Also the drones could be replaced by other types of robots or machines.
+
 ![Architecture](https://raw.githubusercontent.com/jose-troche/Documentation/master/AlexaDronePilot/AlexaDronePilotArchitecture.png)
 
