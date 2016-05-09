@@ -39,19 +39,19 @@ public class IotDroneSubscriber {
     // IoT endpoint
     // describe endpoint call returns: XXXXXXXXXX.iot.<region>.amazonaws.com,
     // endpoint prefix string is XXXXXXX
-    private static final String CUSTOMER_SPECIFIC_ENDPOINT_PREFIX = "A3RR56M9D36ZD1";
+    private static final String CUSTOMER_SPECIFIC_ENDPOINT_PREFIX = "XXXXXXX";
     // Cognito pool ID. For this app, pool needs to be unauthenticated pool with
     // AWS IoT permissions.
-    private static final String COGNITO_POOL_ID = "us-east-1:1e1220dd-14b8-4456-9374-6ff6593195ef";
+    private static final String COGNITO_POOL_ID = "<pool_id>";
     // Name of the AWS IoT policy to attach to a newly created certificate
-    private static final String AWS_IOT_POLICY_NAME = "FullAccess";
+    private static final String AWS_IOT_POLICY_NAME = "Policy";
 
     // Region of AWS IoT
     private static final Regions MY_REGION = Regions.US_EAST_1;
     // Filename of KeyStore file on the filesystem
     private static final String KEYSTORE_NAME = "iot_keystore";
     // Password for the private key in the KeyStore
-    private static final String KEYSTORE_PASSWORD = "jnUSZX8GWHh2kr9pwTDWLV9V";
+    private static final String KEYSTORE_PASSWORD = "password";
     // Certificate and key aliases in the KeyStore
     private static final String CERTIFICATE_ID = "default";
     // The IoT Drone Topic
