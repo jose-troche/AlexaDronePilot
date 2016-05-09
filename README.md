@@ -8,6 +8,8 @@ _Alexa start drone pilot... take off_  -> The drone takes off
 
 _Go up_  -> The drone flies up
 
+_Picture_ -> The drone takes a picture
+
 ... other commands ...
 
 _Land_  -> The drone lands
